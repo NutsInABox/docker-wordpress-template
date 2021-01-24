@@ -3,13 +3,13 @@ volumes:
     driver_opts:
       o: bind
       type: none
-      device: /Users/seiji/Documents/docker/wordpress/appserver/wpdata
+      device: /path/to/the/dir/stores/wordpress/data/files
 
   dbdata:
     driver_opts:
       o: bind
       type: none
-      device: /Users/seiji/Documents/docker/wordpress/appserver/dbdata
+      device: /path/to/the/dir/stores/mysql/db/data/files
 
 services:
   dbserver:
