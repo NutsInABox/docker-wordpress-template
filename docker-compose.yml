@@ -1,0 +1,45 @@
+volumes:
+  wpdata:
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/seiji/Documents/docker/wordpress/appserver/wpdata
+
+  dbdata:
+    driver_opts:
+      o: bind
+      type: none
+      device: /Users/seiji/Documents/docker/wordpress/appserver/dbdata
+
+services:
+  dbserver:
+    image: mysql:5.7.32
+    volumes:
+      - dbdata:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wpuser
+      MYSQL_PASSWORD: password
+
+  appserver:
+    build: appserver
+    volumes:
+      - wpdata:/var/www/html
+    environment:
+      WORDPRESS_DB_HOST: dbserver
+      WORDPRESS_DB_NAME: wordpress
+      WORDPRESS_DB_USER: wpuser
+      WORDPRESS_DB_PASSWORD: password
+    depends_on:
+      - dbserver
+
+  webserver:
+    build: webserver
+    volumes:
+      - wpdata:/usr/share/nginx/html
+    ports:
+      - 8080:80
+    depends_on:
+      - appserver
+
